@@ -1,29 +1,19 @@
-import {View, Text, useColorScheme} from 'react-native'
+import {View, Text, Image, useColorScheme} from 'react-native'
 import Styles from '../styles/main'
 import Colors from '../theme/colors'
 
-export default Header = ({children, title = 'header'}) => {
+export default Header = ({children}) => {
   const isDarkMode = useColorScheme() === 'dark'
   return (
-    <View style={Styles.sectionContainer}>
+    <View style={Styles.header}>
+      <Image source={require('../assets/white_logo_100.png')} />
       <Text
         style={[
           Styles.sectionTitle,
           {
             color: isDarkMode ? Colors.white : Colors.black
           }
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          Styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark
-          }
-        ]}>
-        {children}
-      </Text>
+        ]}></Text>
     </View>
   )
 }
