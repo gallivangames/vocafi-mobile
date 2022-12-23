@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 
 import {
-  Colors,
   DebugInstructions,
   LearnMoreLinks,
   ReloadInstructions
@@ -18,40 +17,14 @@ import {
 
 import Styles from './styles/main'
 import Header from './containers/header'
-
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark'
-  return (
-    <View style={Styles.sectionContainer}>
-      <Text
-        style={[
-          Styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black
-          }
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          Styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark
-          }
-        ]}>
-        {children}
-      </Text>
-    </View>
-  )
-}
+import Colors from './theme/colors'
+import Section from './components/molecules/section'
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark'
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
+    backgroundColor: Colors.darker
   }
 
   return (

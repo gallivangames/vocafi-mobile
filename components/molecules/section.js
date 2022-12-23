@@ -1,13 +1,14 @@
-import {View, Text} from 'react-native'
-import styles from '../../styles/main'
+import {View, Text, useColorScheme} from 'react-native'
+import Styles from '../../styles/main'
+import Colors from '../../theme/colors'
 
 export default Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark'
   return (
-    <View style={styles.sectionContainer}>
+    <View style={Styles.sectionContainer}>
       <Text
         style={[
-          styles.sectionTitle,
+          Styles.sectionTitle,
           {
             color: isDarkMode ? Colors.white : Colors.black
           }
@@ -16,7 +17,7 @@ export default Section = ({children, title}) => {
       </Text>
       <Text
         style={[
-          styles.sectionDescription,
+          Styles.sectionDescription,
           {
             color: isDarkMode ? Colors.light : Colors.dark
           }
