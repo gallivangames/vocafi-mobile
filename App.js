@@ -1,64 +1,48 @@
-import React from 'react'
+import 'react-native-gesture-handler'
+import {NavigationContainer} from '@react-navigation/native'
+import {createStackNavigator} from '@react-navigation/stack'
 
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  useColorScheme,
-  View
-} from 'react-native'
+import SplashScreen from './src/features/splash/splash'
+import LoginScreen from './src/features/login/login'
+// import RegisterScreen from './screens/register'
+import DrawerNavigationRoutes from './src/navigation/drawer_routes'
 
-import {
-  DebugInstructions,
-  LearnMoreLinks,
-  ReloadInstructions
-} from 'react-native/Libraries/NewAppScreen'
+const Stack = createStackNavigator()
 
-import Styles from './styles/main'
-import Header from './containers/header'
-import Colors from './theme/colors'
-import Section from './components/molecules/section'
-
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark'
-
-  const backgroundStyle = {
-    backgroundColor: Colors.darker
-  }
-
+const Auth = () => {
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <Stack.Navigator initialRouteName="LoginScreen">
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{headerShown: false}}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white
-          }}>
-          <Section title="Step One">
-            Edit <Text style={Styles.highlight}>fuuuuck</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      {/* <Stack.Screen name='RegisterScreen' component={RegisterScreen} options={{title: 'Register', headerStyle: {backgroundColor: '#307ecc',}, headerTintColor: '#fff', headerTitleStyle: {fontWeigth: 'bold'}}} /> */}
+    </Stack.Navigator>
   )
 }
 
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Auth"
+          component={Auth}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DrawerNavigationRoutes"
+          component={DrawerNavigationRoutes}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
 export default App
