@@ -1,15 +1,17 @@
 import React from 'react'
 import {View, Text, Alert, StyleSheet} from 'react-native'
-
+import {useDispatch} from 'react-redux'
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem
 } from '@react-navigation/drawer'
-
 import EncryptedStorage from 'react-native-encrypted-storage'
 
+import {revertAll} from '../../slices/user'
+
 const SidebarMenu = props => {
+  const dispatch = useDispatch()
   return (
     <View style={stylesSidebar.sideMenuContainer}>
       <View style={stylesSidebar.profileHeader}>
@@ -42,6 +44,7 @@ const SidebarMenu = props => {
                   text: 'Confirm',
                   onPress: () => {
                     EncryptedStorage.clear()
+                    dispatch(revertAll())
                     // TODO clear the state as well
                     props.navigation.replace('Auth')
                   }

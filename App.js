@@ -1,11 +1,13 @@
 import 'react-native-gesture-handler'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
+import {useDispatch, useSelector} from 'react-redux'
+import jwtDecode from 'jwt-decode'
 
 import SplashScreen from './src/features/splash/splash'
 import LoginScreen from './src/features/login/login'
-// import RegisterScreen from './screens/register'
 import DrawerNavigationRoutes from './src/navigation/drawer_routes'
+import {refresh} from './src/slices/user'
 
 const Stack = createStackNavigator()
 
@@ -23,8 +25,43 @@ const Auth = () => {
 }
 
 const App = () => {
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+
+  const authVerify = async () => {
+    // TODO this may still need work to send query AFTER the refresh happens.
+
+    // if no user - we dont' have to do anything, it will log them out anyway
+    if (user) {
+      // if user then check expiration
+
+      try {
+        if (user.token) {
+          const token = jwtDecode(user.token)
+
+          if (token) {
+            // check the userid's match
+            if (user.user.id !== token.user.id) {
+              // error and log out
+            } else {
+              if (token.exp * 1000 <= new Date().getTime()) {
+                // it's expired so try to refresh
+                await dispatch(refresh())
+              }
+            }
+          }
+        } else {
+          // there is no token, you should be sent to login
+        }
+      } catch (err) {
+        console.debug('invalid token')
+        console.log(err)
+      }
+    }
+  }
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onStateChange={authVerify}>
       <Stack.Navigator initialRouteName="SplashScreen">
         <Stack.Screen
           name="SplashScreen"

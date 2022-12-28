@@ -6,3 +6,11 @@ export const getBooks = token => {
     withCredentials: true
   })
 }
+
+export const getBook = (id, token) => {
+  return http.get('/books', {
+    params: {id},
+    headers: {token},
+    withCredentials: true
+  })
+}

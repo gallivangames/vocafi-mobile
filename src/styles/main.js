@@ -65,8 +65,8 @@ export default Styles = StyleSheet.create({
     padding: 10
   },
   sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24
+    marginTop: 5,
+    paddingHorizontal: 5
   },
 
   sectionDescription: {
@@ -77,10 +77,10 @@ export default Styles = StyleSheet.create({
   SectionStyle: {
     flexDirection: 'row',
     height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10
+    marginTop: 5,
+    marginLeft: 5,
+    marginRight: 5,
+    margin: 5
   },
   sectionTitle: {
     fontSize: 24,

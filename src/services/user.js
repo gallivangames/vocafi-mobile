@@ -10,6 +10,10 @@ class UserService {
       }
     )
   }
+
+  refresh(rtf) {
+    return http.post('/refresh', {rtf})
+  }
 }
 
 export default new UserService()

@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import {getBooks as findBooks} from '../services/book'
+import {getBooks as findBooks, getBook as findBook} from '../services/book'
+import {revertAll} from './user'
 
 export const getBooks = createAsyncThunk(
   'book/getAll',
@@ -14,13 +15,36 @@ export const getBooks = createAsyncThunk(
   }
 )
 
+export const getBook = createAsyncThunk('book/get', async (id, {getState}) => {
+  try {
+    const state = getState()
+    const book = state.book.books.find(book => book.id === id)
+    if (book && book.narrations) {
+      return book.narrations
+    }
+
+    const response = await findBook(id, state.user.token)
+    return response
+  } catch (error) {
+    console.error(error)
+  }
+})
+
+const initialState = {
+  books: []
+}
 export const Book = createSlice({
   name: 'book',
-  initialState: {
-    books: []
-  },
+  initialState,
   reducers: {},
   extraReducers: builder => {
+    builder.addCase(revertAll, () => initialState)
+    builder.addCase(getBook.fulfilled, (state, {payload}) => {
+      if (payload && payload.data) {
+        const book = state.books.find(book => book.id === payload.data.book.id)
+        book.narrations = payload.data
+      }
+    })
     builder.addCase(getBooks.fulfilled, (state, {payload}) => {
       if (payload && payload.data) {
         state.books = payload.data.books
