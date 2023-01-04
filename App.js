@@ -1,13 +1,16 @@
 import 'react-native-gesture-handler'
+import {useEffect} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {useDispatch, useSelector} from 'react-redux'
 import jwtDecode from 'jwt-decode'
+import EncryptedStorage from 'react-native-encrypted-storage'
 
 import SplashScreen from './src/features/splash/splash'
 import LoginScreen from './src/features/login/login'
+import BookScreen from './src/features/book/books'
 import DrawerNavigationRoutes from './src/navigation/drawer_routes'
-import {refresh} from './src/slices/user'
+import {refresh, login} from './src/slices/user'
 
 const Stack = createStackNavigator()
 
@@ -29,33 +32,36 @@ const App = () => {
   const user = useSelector(state => state.user)
 
   const authVerify = async () => {
-    // TODO this may still need work to send query AFTER the refresh happens.
-
-    // if no user - we dont' have to do anything, it will log them out anyway
     if (user) {
-      // if user then check expiration
-
       try {
         if (user.token) {
           const token = jwtDecode(user.token)
-
           if (token) {
-            // check the userid's match
             if (user.user.id !== token.user.id) {
               // error and log out
             } else {
               if (token.exp * 1000 <= new Date().getTime()) {
-                // it's expired so try to refresh
-                await dispatch(refresh())
+                try {
+                  await dispatch(refresh())
+                } catch (err) {
+                  const creds = await EncryptedStorage.getItem('creds')
+
+                  if (creds) {
+                    const results = await dispatch(login(JSON.parse(creds)))
+                  } else {
+                    // todo redirect to login
+                  }
+                }
               }
             }
           }
         } else {
           // there is no token, you should be sent to login
+          // tODO redirect to login
         }
       } catch (err) {
-        console.debug('invalid token')
         console.log(err)
+        // TODO redirect to login
       }
     }
   }
@@ -72,6 +78,11 @@ const App = () => {
           name="Auth"
           component={Auth}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="BookScreen"
+          component={BookScreen}
+          options={{headerShown: true}}
         />
         <Stack.Screen
           name="DrawerNavigationRoutes"

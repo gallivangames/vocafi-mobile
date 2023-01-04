@@ -2,14 +2,27 @@ import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit'
 import EncryptedStorage from 'react-native-encrypted-storage'
 import jwtDecode from 'jwt-decode'
 
+import store from '../app/configureStore'
 import UserService from '../services/user'
+import {recordActivity} from '../services/app'
+
+export const sendUserActivity = createAsyncThunk(
+  'activity',
+  async (payload, {getState}) => {
+    try {
+      const state = await getState()
+      return await recordActivity(payload, state.user.token)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+)
 
 export const login = createAsyncThunk(
   'user/login',
   async ({email, password}) => {
     try {
       const response = await UserService.login(email, password)
-
       const raw_refresh = response.request.responseHeaders['Set-Cookie']
       const refresh = raw_refresh.substring(14, raw_refresh.indexOf(';'))
 
@@ -31,9 +44,7 @@ export const refresh = createAsyncThunk(
       if (!rft) {
         rejectWithValue('no refresh token')
       }
-      const response = await UserService.refresh(rft)
-      console.debug('sending back the refreshed response')
-      return response
+      return await UserService.refresh(rft)
     } catch (error) {
       console.error(error)
     }
@@ -43,42 +54,30 @@ export const refresh = createAsyncThunk(
 const initialState = {
   user: {},
   token: '',
-  api_version: '0.0.0'
+  api_version: '0.0.0',
+  current_narration: {}
 }
 export const User = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    // setUser: (state, action) => {
-    //   console.debug('setting user', action.payload)
-    //   state.value = action.payload
-    // },
-  },
+  reducers: {},
   extraReducers: builder => {
-    // builder.addCase(login.pending, state => {
-    //   // state.statusByName[action.meta.arg] = 'pending'
-    // })
     builder.addCase(revertAll, () => initialState)
+    builder.addCase(setCurrentNarration, (state, {payload}) => {
+      state.current_narration = payload
+    })
     builder.addCase(refresh.fulfilled, (state, {payload}) => {
-      console.debug('payload', payload.data)
       if (payload && payload.data) {
         state.token = payload.data.access_token
       }
     })
     builder.addCase(login.fulfilled, (state, {payload}) => {
-      // state.statusByName[action.meta.arg] = 'fulfilled'
-      // state.dataByName[action.meta.arg] = payload
-      console.debug('logging in', payload.data)
       if (payload && payload.data) {
         state.user = payload.data.user
         state.token = payload.data.token
         state.api_version = payload.data.api_version
       }
-      // TODO save to encrypted storage?
     })
-    // builder.addCase(login.rejected, (state, action) => {
-    //   // state.statusByName[action.meta.arg] = 'rejected'
-    // })
   }
 })
 
@@ -93,3 +92,46 @@ export const isLoggedIn = state => {
 }
 
 export const revertAll = createAction('REVERT_ALL')
+export const setCurrentNarration = createAction('SET_CURRENT_NARRATION')
+
+export const sendUserAction = payload => {
+  if (payload.action === 'update bookmark') {
+    const state = store.getState()
+    if (state.user.current_narration.id) {
+      if (
+        state.user.current_narration.last_recorded_time > payload.current_time
+      ) {
+        store.dispatch(
+          setCurrentNarration({
+            id: payload.narration_id,
+            last_recorded_time: payload.current_time
+          })
+        )
+        store.dispatch(sendUserActivity(payload))
+      } else {
+        if (
+          state.user.current_narration.last_recorded_time + 10 <=
+          payload.current_time
+        ) {
+          store.dispatch(
+            setCurrentNarration({
+              id: payload.narration_id,
+              last_recorded_time: payload.current_time
+            })
+          )
+          store.dispatch(sendUserActivity(payload))
+        }
+      }
+    } else {
+      store.dispatch(
+        setCurrentNarration({
+          id: payload.narration_id,
+          last_recorded_time: payload.current_time
+        })
+      )
+      store.dispatch(sendUserActivity(payload))
+    }
+  } else {
+    store.dispatch(sendUserActivity(payload))
+  }
+}

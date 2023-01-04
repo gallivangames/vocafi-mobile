@@ -4,7 +4,7 @@ import {revertAll} from './user'
 
 export const getBooks = createAsyncThunk(
   'book/getAll',
-  async (arg, {getState}) => {
+  async (_, {getState}) => {
     try {
       const state = getState()
       const response = await findBooks(state.user.token)
@@ -22,9 +22,7 @@ export const getBook = createAsyncThunk('book/get', async (id, {getState}) => {
     if (book && book.narrations) {
       return book.narrations
     }
-
-    const response = await findBook(id, state.user.token)
-    return response
+    return await findBook(id, state.user.token)
   } catch (error) {
     console.error(error)
   }
@@ -48,6 +46,7 @@ export const Book = createSlice({
     builder.addCase(getBooks.fulfilled, (state, {payload}) => {
       if (payload && payload.data) {
         state.books = payload.data.books
+        state.sections = payload.data.sections
       }
     })
   }
