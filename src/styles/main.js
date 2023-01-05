@@ -28,15 +28,24 @@ export default Styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#307ecc'
+    backgroundColor: '#000000'
   },
   errorTextStyle: {
     color: 'red',
     textAlign: 'center',
     fontSize: 14
   },
-  header: {
-    backgroundColor: Colors.black
+  headerTitle: {
+    backgroundColor: Colors.black,
+    color: '#ffffff',
+    fontSize: 22,
+    margin: 7
+  },
+  headerTitlePublished: {
+    backgroundColor: Colors.black,
+    color: '#ffffff',
+    fontSize: 12,
+    margin: 9
   },
   highlight: {
     fontWeight: '700'
@@ -53,7 +62,7 @@ export default Styles = StyleSheet.create({
   mainBody: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#307ecc',
+    backgroundColor: '#000000',
     alignContent: 'center'
   },
   registerTextStyle: {
@@ -85,5 +94,11 @@ export default Styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600'
+  },
+  synopsis: {
+    margin: 3,
+    padding: 9,
+    color: '#ffffff',
+    fontSize: 18
   }
 })

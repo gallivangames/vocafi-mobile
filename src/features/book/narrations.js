@@ -7,8 +7,8 @@ export default Narrations = ({narrations, handleSelect, selected}) => {
 
   if (!narrations) return <View />
   const style = selected
-    ? {color: '#000000', backgroundColor: '#dedede'}
-    : {color: '#000000'}
+    ? {color: '#ffffff', backgroundColor: '#dedede', fontSize: 22}
+    : {color: '#ffffff', fontSize: 22}
 
   return (
     <View>

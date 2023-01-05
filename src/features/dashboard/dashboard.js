@@ -58,18 +58,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
-    marginHorizontal: 16
+    backgroundColor: '#000000'
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8
-  },
+
   header: {
-    fontSize: 32,
-    backgroundColor: '#fff'
+    fontSize: 26,
+    color: '#ffffff',
+    backgroundColor: '#000000'
   },
   title: {
-    fontSize: 24
+    fontSize: 24,
+    color: '#ffffff'
   }
 })

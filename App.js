@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler'
-import {useEffect} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {useDispatch, useSelector} from 'react-redux'
@@ -82,7 +81,16 @@ const App = () => {
         <Stack.Screen
           name="BookScreen"
           component={BookScreen}
-          options={{headerShown: true}}
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: '#000000'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold'
+            }
+          }}
         />
         <Stack.Screen
           name="DrawerNavigationRoutes"

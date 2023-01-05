@@ -30,7 +30,7 @@ const HomeScreenStack = ({navigation}) => {
           headerLeft: () => (
             <NavigationDrawerHeader navigationProps={navigation} />
           ),
-          headerStyle: {backgroundColor: '#307ecc'},
+          headerStyle: {backgroundColor: '#000000'},
           headerTintColor: '#fff',
           headerTitleStyle: {fontWeight: 'bold'}
         }}
@@ -73,7 +73,7 @@ const DrawerNavigatorRoutes = props => {
       drawerContent={SidebarMenu}>
       <Drawer.Screen
         name="homeScreenStack"
-        options={{drawerLabel: 'Home Screen'}}
+        options={{drawerLabel: 'Dashboard'}}
         component={HomeScreenStack}
       />
       {/* <Drawer.Screen

@@ -6,21 +6,22 @@ import {
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
-  Button
+  Button,
+  Pressable
 } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import TrackPlayer, {
-  useProgress,
   useTrackPlayerEvents,
   Event
 } from 'react-native-track-player'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 import {setupPlayer, addTracks} from '../player/player'
 
 import {getBook} from '../../slices/book'
 import Narrations from './narrations'
 
-import {appContainer, content, header, headerTitle} from '../player/styles'
+import Style from '../../styles/main'
 import {sendUserActivity} from '../../slices/user'
 
 const API_URL = 'http://127.0.0.1:8000'
@@ -153,35 +154,39 @@ export default Book = ({
     dispatch(sendUserActivity(payload))
   }
 
-  if (!book) return <View />
+  if (!book) return <View style={Style.container} />
 
   if (!isPlayerReady) {
     return (
-      <SafeAreaView style={appContainer}>
+      <SafeAreaView style={Style.container}>
         <ActivityIndicator size="large" color="#bbb" />
       </SafeAreaView>
     )
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={Style.container}>
       <Image
         source={{
           uri: `${COVER_URL}${book.cover}`
         }}
         style={{
-          width: 150,
-          height: 150,
+          width: 350,
+          height: 350,
           resizeMode: 'contain',
           margin: 5,
-          borderRadius: 10
+          borderRadius: 50
         }}
       />
-      <Text style={{color: '#000'}}>title: {book.title}</Text>
-      <Text style={{color: '#000'}}>authors: {book.author.name}</Text>
-      <Text style={{color: '#000'}}>published_at: {book.published_at}</Text>
-      <View style={header}>
-        <Text style={headerTitle}>Select a narration from below</Text>
+      <Text style={Style.headerTitle}>Written by {book.author.name}</Text>
+      <Text style={Style.headerTitlePublished}>
+        Published {book.published_at.split('-')[0]}
+      </Text>
+      <View style={Style.header}>
+        <Text style={Style.synopsis}>
+          {book.narrations ? book.narrations.book.synopsis : '...'}
+        </Text>
+        <Text style={Style.headerTitlePublished}>Available narrations: </Text>
       </View>
       <Narrations
         narrations={book.narrations}
@@ -191,7 +196,10 @@ export default Book = ({
 
       <StatusBar backgroundColor={'#35427e'} />
 
-      <View style={content}>
+      <View style={Style.content}>
+        <Pressable onPress={handleUserPlay}>
+          <Icon name="play" size={30} color="#ffffff" />
+        </Pressable>
         <Button title="Play" color="#777" onPress={handleUserPlay} />
         <Button title="Pause" color="#777" onPress={handleUserPause} />
         <Button title="reset" color="#777" onPress={handleReset} />
