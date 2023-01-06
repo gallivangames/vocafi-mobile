@@ -21,14 +21,12 @@ export default Dashboard = ({navigation}) => {
     dispatch(getBooks())
   }, [])
 
-  if (sections) console.debug('sectios', sections, sections[0])
-
   return (
     <SafeAreaView style={styles.container}>
       {(!sections || !books) && (
         <ActivityIndicator
           animating={true}
-          color="#000000"
+          color="#ffffff"
           size="large"
           style={Styles.activityIndicator}
         />

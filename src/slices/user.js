@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode'
 import store from '../app/configureStore'
 import UserService from '../services/user'
 import {recordActivity} from '../services/app'
+import {updateBookmark} from './book'
 
 export const sendUserActivity = createAsyncThunk(
   'activity',
@@ -64,6 +65,8 @@ export const User = createSlice({
   extraReducers: builder => {
     builder.addCase(revertAll, () => initialState)
     builder.addCase(setCurrentNarration, (state, {payload}) => {
+      // TODO setting current Narration but i don't think this is actually used
+      // TODO but if we can retrieve the current narration then maybe we can reset it?
       state.current_narration = payload
     })
     builder.addCase(refresh.fulfilled, (state, {payload}) => {
@@ -97,6 +100,7 @@ export const setCurrentNarration = createAction('SET_CURRENT_NARRATION')
 export const sendUserAction = payload => {
   if (payload.action === 'update bookmark') {
     const state = store.getState()
+    store.dispatch(updateBookmark({payload}))
     if (state.user.current_narration.id) {
       if (
         state.user.current_narration.last_recorded_time > payload.current_time
