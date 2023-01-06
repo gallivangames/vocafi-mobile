@@ -46,12 +46,14 @@ export default Narrations = ({narrations, advertisements, book_id}) => {
         const track = await TrackPlayer.getTrack(index)
         if (track) {
           const nar = narrations.find(narr => narr.id === track.id)
-          setSelected(nar.id)
-          // do i need to set isAd / playing and all that here?
-          if (track.advertisement_id) {
-            setIsAd(true)
-          } else {
-            setIsAd(false)
+          if (nar) {
+            setSelected(nar.id)
+            // do i need to set isAd / playing and all that here?
+            if (track.advertisement_id) {
+              setIsAd(true)
+            } else {
+              setIsAd(false)
+            }
           }
         }
       }
