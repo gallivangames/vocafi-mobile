@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {View} from 'react-native'
 import TrackPlayer, {
   useTrackPlayerEvents,
@@ -38,6 +38,26 @@ export default Narrations = ({narrations, advertisements, book_id}) => {
 
     dispatch(sendUserActivity(payload))
   }
+
+  useEffect(() => {
+    const setup = async () => {
+      const index = await TrackPlayer.getCurrentTrack()
+      if (index) {
+        const track = await TrackPlayer.getTrack(index)
+        if (track) {
+          const nar = narrations.find(narr => narr.id === track.id)
+          setSelected(nar.id)
+          // do i need to set isAd / playing and all that here?
+          if (track.advertisement_id) {
+            setIsAd(true)
+          } else {
+            setIsAd(false)
+          }
+        }
+      }
+    }
+    setup()
+  }, [])
 
   const handleSelect = async newNarration => {
     if (newNarration.id !== selected) {

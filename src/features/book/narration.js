@@ -41,15 +41,17 @@ export default Narration = ({narration, playNarration, isAd, selected}) => {
             flexDirection: 'row',
             alignItems: 'center'
           }}>
-          {!isPlaying && !isLoading && (
-            <Icon
-              name="play"
-              size={20}
-              color="#ffffff"
-              style={{marginRight: 15}}
-            />
-          )}
-          {!isAd && selected && isPlaying && (
+          {(selected === '' || selected === narration.id) &&
+            !isPlaying &&
+            !isLoading && (
+              <Icon
+                name="play"
+                size={20}
+                color="#ffffff"
+                style={{marginRight: 15}}
+              />
+            )}
+          {!isAd && selected === narration.id && isPlaying && (
             <Icon
               name="pause"
               size={20}

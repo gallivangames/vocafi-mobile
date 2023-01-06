@@ -28,11 +28,6 @@ export default Book = ({
       setIsPlayerReady(isSetup)
     }
     setup()
-
-    return () => {
-      //TODO we don't want to shut it off when lost - we want to keep playing but we need to reload on remount
-      if (TrackPlayer) TrackPlayer.reset()
-    }
   }, [])
 
   useEffect(() => {
