@@ -1,6 +1,5 @@
 import {View, Image, Pressable} from 'react-native'
-
-const COVER_URL = 'https://www.vocafi.com/img/covers/'
+import {COVER_URL} from '../../utils/constants'
 
 export default Book = ({cover, id, navigation}) => {
   const goToBook = () => {

@@ -11,8 +11,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import {sendUserActivity} from '../../slices/user'
 import {addTracks} from '../player/player'
 import Narration from './narration'
+import {API_URL} from '../../utils/constants'
 
-const API_URL = 'http://127.0.0.1:8000'
 const events = [Event.PlaybackState, Event.PlaybackError]
 
 export default Narrations = ({narrations, advertisements, book_id}) => {

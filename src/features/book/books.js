@@ -7,8 +7,7 @@ import {setupPlayer} from '../player/player'
 import {getBook} from '../../slices/book'
 import Narrations from './narrations'
 import Style from '../../styles/main'
-
-const COVER_URL = 'https://www.vocafi.com/img/covers/'
+import {COVER_URL} from '../../utils/constants'
 
 export default Book = ({
   navigation,

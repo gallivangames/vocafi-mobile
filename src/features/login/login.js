@@ -47,8 +47,6 @@ export default LoginScreen = ({navigation}) => {
     dispatch(login(payload))
       .then(response => {
         if (response.payload && response.payload.data) {
-          // EncryptedStorage.setItem('atoken', data.token)
-
           setLoading(false)
         } else {
           setLoading(false)
